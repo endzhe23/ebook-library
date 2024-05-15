@@ -46,7 +46,7 @@ export class AuthorController {
   }
 
   @Get('/author/')
-  getNameByAuthor(@Query('book-title') bookTitle: string): Author[] {
-    return this.appService.getNameByAuthor(bookTitle);
+  getAuthorByName(@Query('book-title') bookTitle: string): Author {
+    return this.appService.getAuthorByName(bookTitle);
   }
 }

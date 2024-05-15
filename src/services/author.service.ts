@@ -45,10 +45,10 @@ export class AuthorService {
   }
 
   getAuthorById(id: string): Author {
-    return this._authors.find((author) => author.id == id);
+    return this._authors.find((author) => author.id === id);
   }
 
-  getNameByAuthor(name: string): Author[] {
-    return this._authors.filter((author: Author) => author.name === name);
+  getAuthorByName(name: string): Author {
+    return this._authors.find((author: Author) => author.name === name);
   }
 }

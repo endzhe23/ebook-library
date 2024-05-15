@@ -58,7 +58,7 @@ export class BookService {
   }
 
   getBookById(id: string): Book {
-    return this._books.find((book) => book.id == id);
+    return this._books.find((book) => book.id === id);
   }
 
   getBooksByAuthor(author: string): Book[] {
