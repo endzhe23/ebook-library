@@ -42,7 +42,7 @@ export class BookService {
     this._books.push(book);
   }
 
-  updateBook(id: string, bookDto: UpdateBook): Book {
+  updateBook(id: string, bookDto: UpdateBook) {
     const book = this.getBookById(id);
     if (book) {
       book.author = bookDto.author ?? book.author;
@@ -54,11 +54,11 @@ export class BookService {
   }
 
   deleteBook(id: string) {
-    this._books = this._books.filter((book: Book) => book.id !== id);
+    this._books = this._books.filter((book) => book.id !== id);
   }
 
   getBookById(id: string): Book {
-    return this._books.find((book: Book) => book.id === id);
+    return this._books.find((book) => book.id == id);
   }
 
   getBooksByAuthor(author: string): Book[] {
