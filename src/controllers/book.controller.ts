@@ -15,35 +15,35 @@ import { UpdateBook } from '../dto/update-book.dto';
 
 @Controller('/books')
 export class BookController {
-  constructor(private readonly appService: BookService) {}
+  constructor(private readonly bookService: BookService) {}
 
   @Get()
   getBooks(): Book[] {
-    return this.appService.getBooks();
+    return this.bookService.getBooks();
   }
 
   @Post('/add')
   createBook(@Body() bookDto: CreateBook) {
-    return this.appService.createBook(bookDto);
+    return this.bookService.createBook(bookDto);
   }
 
   @Put('/edit/:bookId')
   updateBook(@Param('bookId') bookId: string, @Body() bookDto: UpdateBook) {
-    return this.appService.updateBook(bookId, bookDto);
+    return this.bookService.updateBook(bookId, bookDto);
   }
 
   @Delete('/delete/:bookId')
   deleteBook(@Param('bookId') bookId: string) {
-    return this.appService.deleteBook(bookId);
+    return this.bookService.deleteBook(bookId);
   }
 
-  @Get('/book/:bookId')
+  @Get('/book/:bookId/:authorId')
   getBookById(@Param('bookId') bookId: string): Book {
-    return this.appService.getBookById(bookId);
+    return this.bookService.getBookById(bookId);
   }
 
   @Get('/book/')
   getBooksByAuthor(@Query('book-author') bookAuthor: string): Book[] {
-    return this.appService.getBooksByAuthor(bookAuthor);
+    return this.bookService.getBooksByAuthor(bookAuthor);
   }
 }
