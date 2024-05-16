@@ -18,35 +18,37 @@ export class AuthorController {
   constructor(private readonly appService: AuthorService) {}
 
   @Get()
-  getAuthors() {
+  async getAuthors(): Promise<Author[]> {
     return this.appService.getAuthors();
   }
 
   @Post('/add')
-  createAuthor(@Body() authorDto: CreateAuthor) {
+  async createAuthor(@Body() authorDto: CreateAuthor): Promise<void> {
     return this.appService.createAuthor(authorDto);
   }
 
   @Put('/edit/:authorId')
-  updateAuthor(
-    @Param('authorId') authorId: string,
+  async updateAuthor(
+    @Param('authorId') authorId: number,
     @Body() authorDto: UpdateAuthor,
-  ) {
+  ): Promise<void> {
     return this.appService.updateAuthor(authorId, authorDto);
   }
 
   @Delete('/delete/:authorId')
-  deleteAuthor(@Param('authorId') authorId: string) {
+  async deleteAuthor(@Param('authorId') authorId: number): Promise<void> {
     return this.appService.deleteAuthor(authorId);
   }
 
   @Get('/author/:authorId')
-  getAuthorById(@Param('authorId') authorId: string): Author {
+  async getAuthorById(@Param('authorId') authorId: number): Promise<Author> {
     return this.appService.getAuthorById(authorId);
   }
 
   @Get('/author/')
-  getAuthorByName(@Query('book-title') bookTitle: string): Author {
+  async getAuthorByName(
+    @Query('book-title') bookTitle: string,
+  ): Promise<Author[]> {
     return this.appService.getAuthorByName(bookTitle);
   }
 }

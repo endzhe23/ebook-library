@@ -5,10 +5,16 @@ import { AuthorController } from './controllers/author.controller';
 import { AuthorService } from './services/author.service';
 import { DatabaseModule } from './database/database.module';
 import { bookRepository } from './repositories/book.repository';
+import { authorRepository } from './repositories/author.repository';
 
 @Module({
   imports: [DatabaseModule],
   controllers: [BookController, AuthorController],
-  providers: [...bookRepository, BookService, AuthorService],
+  providers: [
+    ...bookRepository,
+    ...authorRepository,
+    BookService,
+    AuthorService,
+  ],
 })
 export class AppModule {}

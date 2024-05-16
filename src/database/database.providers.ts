@@ -1,5 +1,6 @@
 import { DataSource } from 'typeorm';
 import { Book } from '../models/book.model';
+import { Author } from '../models/author.model';
 
 export const databaseProviders = [
   {
@@ -8,7 +9,7 @@ export const databaseProviders = [
       const dataSource = new DataSource({
         type: 'sqlite',
         database: './database.sqlite',
-        entities: [Book],
+        entities: [Book, Author],
         synchronize: true,
       });
 

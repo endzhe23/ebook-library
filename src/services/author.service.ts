@@ -1,54 +1,42 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { Author } from '../models/author.model';
-import { v4 as uuid } from 'uuid';
 import { CreateAuthor } from '../dto/create-author.dto';
 import { UpdateAuthor } from '../dto/update-author.dto';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class AuthorService {
-  private _authors: Author[] = [
-    {
-      id: 'fjjfvn45-ddvfh32',
-      name: 'Daria',
-      book: 'Domik',
-    },
-    {
-      id: 'fjjfvn6778-ddvfh5567',
-      name: 'Igor',
-      book: 'C#',
-    },
-  ];
+  constructor(
+    @Inject('AUTHOR_REPOSITORY') private authorRepository: Repository<Author>,
+  ) {}
 
-  getAuthors(): Author[] {
-    return this._authors;
+  async getAuthors(): Promise<Author[]> {
+    return this.authorRepository.find();
   }
 
-  createAuthor(authorDto: CreateAuthor) {
-    const author: Author = {
-      id: uuid(),
-      ...authorDto,
-    };
-    this._authors.push(author);
+  async createAuthor(authorDto: CreateAuthor): Promise<void> {
+    const author: Author = new Author(authorDto.name, authorDto.book);
+    await this.authorRepository.save(author);
   }
 
-  updateAuthor(id: string, authorDto: UpdateAuthor) {
-    const author = this.getAuthorById(id);
+  async updateAuthor(id: number, authorDto: UpdateAuthor): Promise<void> {
+    const author = await this.authorRepository.findOneBy({ id: id });
     if (author) {
       author.name = authorDto.name ?? author.name;
       author.book = authorDto.book ?? author.book;
     }
-    return author;
+    await this.authorRepository.save<Author>(author);
   }
 
-  deleteAuthor(id: string) {
-    this._authors = this._authors.filter((author) => author.id !== id);
+  async deleteAuthor(id: number) {
+    await this.authorRepository.delete(id);
   }
 
-  getAuthorById(id: string): Author {
-    return this._authors.find((author) => author.id === id);
+  async getAuthorById(id: number): Promise<Author> {
+    return await this.authorRepository.findOneBy({ id: id }); // .find((author: Author) => author.id === id);
   }
 
-  getAuthorByName(name: string): Author {
-    return this._authors.find((author: Author) => author.name === name);
+  async getAuthorByName(name: string): Promise<Author[]> {
+    return this.authorRepository.findBy({ name: name }); // .find((author: Author) => author.name === name);
   }
 }
