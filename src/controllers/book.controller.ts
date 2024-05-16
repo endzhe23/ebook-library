@@ -18,32 +18,37 @@ export class BookController {
   constructor(private readonly appService: BookService) {}
 
   @Get()
-  getBooks(): Book[] {
+  async getBooks(): Promise<Book[]> {
     return this.appService.getBooks();
   }
 
   @Post('/add')
-  createBook(@Body() bookDto: CreateBook) {
+  async createBook(@Body() bookDto: CreateBook): Promise<void> {
     return this.appService.createBook(bookDto);
   }
 
   @Put('/edit/:bookId')
-  updateBook(@Param('bookId') bookId: string, @Body() bookDto: UpdateBook) {
+  async updateBook(
+    @Param('bookId') bookId: number,
+    @Body() bookDto: UpdateBook,
+  ): Promise<void> {
     return this.appService.updateBook(bookId, bookDto);
   }
 
   @Delete('/delete/:bookId')
-  deleteBook(@Param('bookId') bookId: string) {
+  async deleteBook(@Param('bookId') bookId: number): Promise<void> {
     return this.appService.deleteBook(bookId);
   }
 
   @Get('/book/:bookId')
-  getBookById(@Param('bookId') bookId: string): Book {
+  async getBookById(@Param('bookId') bookId: number): Promise<Book> {
     return this.appService.getBookById(bookId);
   }
 
   @Get('/book/')
-  getBooksByAuthor(@Query('book-author') bookAuthor: string): Book[] {
+  async getBooksByAuthor(
+    @Query('book-author') bookAuthor: string,
+  ): Promise<Book[]> {
     return this.appService.getBooksByAuthor(bookAuthor);
   }
 }
