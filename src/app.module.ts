@@ -7,8 +7,8 @@ import { DatabaseModule } from './database/database.module';
 import { bookRepository } from './repositories/book.repository';
 
 @Module({
-  imports: [],
+  imports: [DatabaseModule],
   controllers: [BookController, AuthorController],
-  providers: [BookService, AuthorService],
+  providers: [...bookRepository, BookService, AuthorService],
 })
 export class AppModule {}
