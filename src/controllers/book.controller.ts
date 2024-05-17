@@ -6,7 +6,6 @@ import {
   Param,
   Post,
   Put,
-  Query,
 } from '@nestjs/common';
 import { BookService } from '../services/book.service';
 import { Book } from '../models/book.model';
@@ -43,12 +42,5 @@ export class BookController {
   @Get('/book/:bookId')
   async getBookById(@Param('bookId') bookId: number): Promise<Book> {
     return this.appService.getBookById(bookId);
-  }
-
-  @Get('/book/')
-  async getBooksByAuthor(
-    @Query('book-author') bookAuthor: string,
-  ): Promise<Book[]> {
-    return this.appService.getBooksByAuthor(bookAuthor);
   }
 }

@@ -2,12 +2,14 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Author } from '../models/author.model';
 import { CreateAuthor } from '../dto/create-author.dto';
 import { UpdateAuthor } from '../dto/update-author.dto';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
+import { Book } from '../models/book.model';
 
 @Injectable()
 export class AuthorService {
   constructor(
     @Inject('AUTHOR_REPOSITORY') private authorRepository: Repository<Author>,
+    @Inject('BOOK_REPOSITORY') private bookRepository: Repository<Book>,
   ) {}
 
   async getAuthors(): Promise<Author[]> {
@@ -15,15 +17,17 @@ export class AuthorService {
   }
 
   async createAuthor(authorDto: CreateAuthor): Promise<void> {
-    const author: Author = new Author(authorDto.name, authorDto.book);
+    const books: Book[] = await this.getBooks(authorDto.bookIds);
+    const author: Author = new Author(authorDto.name, books);
     await this.authorRepository.save(author);
   }
 
   async updateAuthor(id: number, authorDto: UpdateAuthor): Promise<void> {
+    const books: Book[] = await this.getBooks(authorDto.bookIds);
     const author = await this.authorRepository.findOneBy({ id: id });
     if (author) {
       author.name = authorDto.name ?? author.name;
-      author.book = authorDto.book ?? author.book;
+      author.books = books ?? author.books;
     }
     await this.authorRepository.save<Author>(author);
   }
@@ -36,7 +40,9 @@ export class AuthorService {
     return await this.authorRepository.findOneBy({ id: id }); // .find((author: Author) => author.id === id);
   }
 
-  async getAuthorByName(name: string): Promise<Author[]> {
-    return this.authorRepository.findBy({ name: name }); // .find((author: Author) => author.name === name);
+  private async getBooks(bookIds: number[]): Promise<Book[]> {
+    return await this.bookRepository.findBy({
+      id: In(bookIds),
+    });
   }
 }

@@ -1,12 +1,20 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Author } from './author.model';
 
 @Entity()
 export class Book {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 50 })
-  author: string;
+  @ManyToMany(() => Author, (author) => author.books)
+  @JoinTable()
+  authors: Author[];
 
   @Column()
   title: string;
@@ -18,12 +26,12 @@ export class Book {
   ISBN: string;
 
   constructor(
-    author: string,
+    authors: Author[],
     title: string,
     description: string,
     ISBN: string,
   ) {
-    this.author = author;
+    this.authors = authors;
     this.title = title;
     this.description = description;
     this.ISBN = ISBN;

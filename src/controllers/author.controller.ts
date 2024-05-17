@@ -6,7 +6,6 @@ import {
   Param,
   Post,
   Put,
-  Query,
 } from '@nestjs/common';
 import { AuthorService } from '../services/author.service';
 import { CreateAuthor } from '../dto/create-author.dto';
@@ -43,12 +42,5 @@ export class AuthorController {
   @Get('/author/:authorId')
   async getAuthorById(@Param('authorId') authorId: number): Promise<Author> {
     return this.appService.getAuthorById(authorId);
-  }
-
-  @Get('/author/')
-  async getAuthorByName(
-    @Query('book-title') bookTitle: string,
-  ): Promise<Author[]> {
-    return this.appService.getAuthorByName(bookTitle);
   }
 }

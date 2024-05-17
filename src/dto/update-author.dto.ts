@@ -1,10 +1,10 @@
-import { IsOptional, IsString } from 'class-validator';
+import { IsArray, IsOptional, IsString } from 'class-validator';
 
 export class UpdateAuthor {
   @IsOptional()
   @IsString()
   name?: string;
   @IsOptional()
-  @IsString()
-  book?: string;
+  @IsArray()
+  bookIds: number[];
 }
