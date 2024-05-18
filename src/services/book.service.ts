@@ -13,7 +13,7 @@ export class BookService {
   ) {}
 
   async getBooks(): Promise<Book[]> {
-    return this.bookRepository.find();
+    return this.bookRepository.find({ relations: ['authors'] });
   }
 
   async createBook(bookDto: CreateBook): Promise<void> {
@@ -44,7 +44,11 @@ export class BookService {
   }
 
   async getBookById(id: number): Promise<Book> {
-    return await this.bookRepository.findOneBy({ id: id });
+    return await this.bookRepository
+      .createQueryBuilder('book')
+      .where({ id })
+      .leftJoinAndSelect('book.authors', 'authors')
+      .getOne();
   }
 
   private async getAuthors(authorIds: number[]): Promise<Author[]> {
