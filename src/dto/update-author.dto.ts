@@ -1,4 +1,4 @@
-import { IsArray, IsOptional, IsString } from 'class-validator';
+import { IsArray, IsNumber, IsOptional, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateAuthor {
@@ -7,7 +7,8 @@ export class UpdateAuthor {
   @ApiProperty({ required: false })
   name?: string;
   @IsOptional()
-  @IsArray({ each: true })
+  @IsArray()
+  @IsNumber({}, { each: true })
   @ApiProperty({ type: [Number], required: false })
   bookIds: number[];
 }

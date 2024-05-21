@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { Author } from '../models/author.model';
 import { CreateAuthor } from '../dto/create-author.dto';
 import { UpdateAuthor } from '../dto/update-author.dto';
@@ -45,8 +45,15 @@ export class AuthorService {
   }
 
   private async getBooks(bookIds: number[]): Promise<Book[]> {
-    return await this.bookRepository.findBy({
-      id: In(bookIds),
-    });
+    if (bookIds) {
+      const books = await this.bookRepository.findBy({
+        id: In(bookIds),
+      });
+      if (books.length === bookIds.length) {
+        return books;
+      } else {
+        throw new NotFoundException(['not all books found']);
+      }
+    }
   }
 }

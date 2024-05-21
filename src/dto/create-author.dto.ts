@@ -1,4 +1,4 @@
-import { IsArray, IsNotEmpty, IsString } from 'class-validator';
+import { IsArray, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateAuthor {
@@ -7,7 +7,8 @@ export class CreateAuthor {
   @ApiProperty()
   name: string;
   @IsNotEmpty()
-  @IsArray({ each: true })
+  @IsArray()
+  @IsNumber({}, { each: true })
   @ApiProperty({ type: [Number] })
   bookIds: number[];
 }
