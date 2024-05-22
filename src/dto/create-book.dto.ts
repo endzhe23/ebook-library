@@ -12,12 +12,12 @@ export class CreateBook {
   @IsNotEmpty()
   @IsArray()
   @ArrayMinSize(1)
-  @Length(2, 50)
   @IsNumber({}, { each: true })
   @ApiProperty({ type: [Number] })
   authorIds: number[];
   @IsNotEmpty()
   @IsString()
+  @Length(2, 50)
   @ApiProperty()
   title: string;
   @IsString()
