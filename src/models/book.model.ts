@@ -6,6 +6,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Author } from './author.model';
+import { Type } from 'class-transformer';
 
 @Entity()
 export class Book {
@@ -14,6 +15,7 @@ export class Book {
 
   @ManyToMany(() => Author, (author) => author.books)
   @JoinTable()
+  @Type(() => Author)
   authors: Author[];
 
   @Column()

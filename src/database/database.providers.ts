@@ -7,8 +7,12 @@ export const databaseProviders = [
     provide: 'DATA_SOURCE',
     useFactory: async () => {
       const dataSource = new DataSource({
-        type: 'sqlite',
-        database: './database.sqlite',
+        type: 'postgres',
+        host: 'localhost',
+        port: 5432,
+        username: 'postgres',
+        password: 'postgres',
+        database: 'postgres',
         entities: [Book, Author],
         synchronize: true,
       });
