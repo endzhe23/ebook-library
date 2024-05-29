@@ -10,9 +10,7 @@ export class Author {
   @Column({ length: 50 })
   name: string;
 
-  @ManyToMany(() => Book, (book) => book.authors, {
-    cascade: ['insert', 'update'],
-  })
+  @ManyToMany(() => Book, (book) => book.authors, { onDelete: 'CASCADE' })
   @Type(() => Book)
   books: Book[];
 
