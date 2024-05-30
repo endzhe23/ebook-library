@@ -13,7 +13,7 @@ export class Book {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToMany(() => Author, (author) => author.books)
+  @ManyToMany(() => Author, (author) => author.books, { onDelete: 'CASCADE' })
   @JoinTable()
   @Type(() => Author)
   authors: Author[];
