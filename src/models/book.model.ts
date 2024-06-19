@@ -15,11 +15,13 @@ export class Book {
   id: number;
 
   @ManyToMany(() => Author, (author) => author.books, { onDelete: 'CASCADE' })
-  @ManyToMany(() => Genre, (genre) => genre.books, { onDelete: 'CASCADE' })
   @JoinTable()
   @Type(() => Author)
-  @Type(() => Genre)
   authors: Author[];
+
+  @ManyToMany(() => Genre, (genre) => genre.books, { onDelete: 'CASCADE' })
+  @JoinTable()
+  @Type(() => Genre)
   genres: Genre[];
 
   @Column()

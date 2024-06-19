@@ -15,7 +15,7 @@ export class BookService {
   ) {}
 
   async getBooks(): Promise<Book[]> {
-    return this.bookRepository.find({ relations: ['authors', 'genre'] });
+    return this.bookRepository.find({ relations: ['authors', 'genres'] });
   }
 
   async createBook(bookDto: CreateBook): Promise<void> {
