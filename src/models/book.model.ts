@@ -6,6 +6,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Author } from './author.model';
+import { Genre } from './genre.model';
 import { Type } from 'class-transformer';
 
 @Entity()
@@ -14,9 +15,12 @@ export class Book {
   id: number;
 
   @ManyToMany(() => Author, (author) => author.books, { onDelete: 'CASCADE' })
+  @ManyToMany(() => Genre, (genre) => genre.books, { onDelete: 'CASCADE' })
   @JoinTable()
   @Type(() => Author)
+  @Type(() => Genre)
   authors: Author[];
+  genres: Genre[];
 
   @Column()
   title: string;
@@ -29,11 +33,13 @@ export class Book {
 
   constructor(
     authors: Author[],
+    genres: Genre[],
     title: string,
     description: string,
     ISBN: string,
   ) {
     this.authors = authors;
+    this.genres = genres;
     this.title = title;
     this.description = description;
     this.ISBN = ISBN;

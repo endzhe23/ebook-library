@@ -4,22 +4,26 @@ import { CreateBook } from '../dto/create-book.dto';
 import { UpdateBook } from '../dto/update-book.dto';
 import { In, Repository } from 'typeorm';
 import { Author } from '../models/author.model';
+import { Genre } from '../models/genre.model';
 
 @Injectable()
 export class BookService {
   constructor(
     @Inject('BOOK_REPOSITORY') private bookRepository: Repository<Book>,
     @Inject('AUTHOR_REPOSITORY') private authorRepository: Repository<Author>,
+    @Inject('GENRE_REPOSITORY') private genreRepository: Repository<Genre>,
   ) {}
 
   async getBooks(): Promise<Book[]> {
-    return this.bookRepository.find({ relations: ['authors'] });
+    return this.bookRepository.find({ relations: ['authors', 'genre'] });
   }
 
   async createBook(bookDto: CreateBook): Promise<void> {
     const authors: Author[] = await this.getAuthors(bookDto.authorIds);
+    const genres: Genre[] = await this.getGenres(bookDto.genreIds);
     const book: Book = new Book(
       authors,
+      genres,
       bookDto.title,
       bookDto.description,
       bookDto.ISBN,
@@ -29,9 +33,11 @@ export class BookService {
 
   async updateBook(id: number, bookDto: UpdateBook): Promise<void> {
     const authors: Author[] = await this.getAuthors(bookDto.authorIds);
+    const genres: Genre[] = await this.getGenres(bookDto.genreIds);
     const book = await this.bookRepository.findOneBy({ id: id });
     if (book) {
       book.authors = authors ?? book.authors;
+      book.genres = genres ?? book.genres;
       book.title = bookDto.title ?? book.title;
       book.description = bookDto.description ?? book.description;
       book.ISBN = bookDto.ISBN ?? book.ISBN;
@@ -48,6 +54,7 @@ export class BookService {
       .createQueryBuilder('book')
       .where({ id })
       .leftJoinAndSelect('book.authors', 'authors')
+      .leftJoinAndSelect('book.genres', 'genres')
       .getOne();
   }
 
@@ -60,6 +67,19 @@ export class BookService {
         return authors;
       } else {
         throw new NotFoundException(['not all authors found']);
+      }
+    }
+  }
+
+  private async getGenres(genreIds: number[]): Promise<Genre[]> {
+    if (genreIds) {
+      const genres = await this.genreRepository.findBy({
+        id: In(genreIds),
+      });
+      if (genres.length === genreIds.length) {
+        return genres;
+      } else {
+        throw new NotFoundException(['not all genres found']);
       }
     }
   }

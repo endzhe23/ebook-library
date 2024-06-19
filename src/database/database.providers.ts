@@ -1,6 +1,7 @@
 import { DataSource } from 'typeorm';
 import { Book } from '../models/book.model';
 import { Author } from '../models/author.model';
+import { Genre } from '../models/genre.model';
 
 export const databaseProviders = [
   {
@@ -13,7 +14,7 @@ export const databaseProviders = [
         username: 'postgres',
         password: 'postgres',
         database: 'postgres',
-        entities: [Book, Author],
+        entities: [Book, Author, Genre],
         synchronize: true,
       });
 

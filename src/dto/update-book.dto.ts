@@ -15,6 +15,12 @@ export class UpdateBook {
   @ApiProperty({ type: [Number], required: false })
   authorIds: number[];
   @IsOptional()
+  @IsArray()
+  @ArrayMinSize(1)
+  @IsNumber({}, { each: true })
+  @ApiProperty({ type: [Number], required: false })
+  genreIds: number[];
+  @IsOptional()
   @IsString()
   @ApiProperty({ required: false })
   title?: string;
